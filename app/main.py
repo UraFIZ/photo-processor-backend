@@ -1,21 +1,21 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .api.routes import router
 from app.config import settings
+from .api.routes import router
 
-app = FastAPI(title="Photo Processor API")
+app = FastAPI(title=settings.PROJECT_NAME)
 
-# Configure CORS
+# CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Your Next.js frontend URL
+    allow_origins=settings.get_cors_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Add routes
-app.include_router(router, prefix="/api")
+app.include_router(router, prefix=settings.API_PREFIX)
 
 if __name__ == "__main__":
     import uvicorn
